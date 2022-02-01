@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-list-server
+  labels:
+    app: todo-list-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-list-server
+  template:
+    metadata:
+      labels:
+        app: todo-list-server
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+      - name: ranky-server
+        image: registry.digitalocean.com/mndy/todo-list-server:BUILDNUM
+        ports:
+        - containerPort: 8080

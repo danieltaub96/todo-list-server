@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-list-server
+  labels:
+    app: todo-list-server
+    dev.expose/conf: "true"
+spec:
+  selector:
+    app: todo-list-server
+  ports:
+    - protocol: TCP
+      name: http-traffic
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: todo-list-server-service-monitor
+spec:
+  selector:
+    matchLabels:
+      app: todo-list-server
+  endpoints:
+    - port: http-traffic
+      path: "/actuator/prometheus"
